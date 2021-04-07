@@ -7,20 +7,10 @@ Matlab scripts that provide some simple quality of life functions while providin
 Converts a string representing a numeric datatype (floating point and integer) into the relevant datatype and checks whether it is a valid number. If Numeric_Valid is false, Numeric_Value should return NaN.
 ```matlab
 %Convert an integer
-String = 13;
+String = "13";
 [Numeric_Value, Numeric_Valid] = Verify_Numeric(String);
 %Convert a float
-String = 16.3;
-[Numeric_Value, Numeric_Valid] = Verify_Numeric(String);
-```
-#### Verify_Numeric.m
-Converts a string representing a numeric datatype (floating point and integer) into the relevant datatype and checks whether it is a valid number. If Numeric_Valid is false, Numeric_Value should return NaN.
-```matlab
-%Convert an integer
-String = 13;
-[Numeric_Value, Numeric_Valid] = Verify_Numeric(String);
-%Convert a float
-String = 16.3;
+String = '16.3';
 [Numeric_Value, Numeric_Valid] = Verify_Numeric(String);
 ```
 #### Verify_Structure_Input.m
