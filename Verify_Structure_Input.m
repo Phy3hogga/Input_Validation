@@ -44,6 +44,7 @@ function [Value, Valid, Default_Used] = Verify_Structure_Input(Structure, Fieldn
         Default_Value_Set = true;
         %check datatype for default value
         Default_Value_Check_Char = ischar(Default_Value);
+        Default_Value_Check_String = isstring(Default_Value);
         Default_Value_Check_Numeric = isnumeric(Default_Value);
         Default_Value_Check_Logical = islogical(Default_Value);
         Default_Value_Check_Cell = iscell(Default_Value);
@@ -52,6 +53,7 @@ function [Value, Valid, Default_Used] = Verify_Structure_Input(Structure, Fieldn
         Default_Value_Set = false;
         %Default all default value datatypes as true
         Default_Value_Check_Char = true;
+        Default_Value_Check_String = true;
         Default_Value_Check_Numeric = true;
         Default_Value_Check_Logical = true;
         Default_Value_Check_Cell = true;
@@ -78,6 +80,11 @@ function [Value, Valid, Default_Used] = Verify_Structure_Input(Structure, Fieldn
                 %default to allow the value
                 Allowed_Default_Value = true;
                 Allowed_Structure_Value = true;
+            end
+            %% convert string datatype to character array (allows interchangable types to be checked)
+            if(isstring(Structure.(Fieldname)) || Default_Value_Check_String)
+                Default_Value_Check_Char = true;
+                Structure.(Fieldname) = char(Structure.(Fieldname));
             end
             %% Check between default datatypes and the supplied input to handle the extraction of the variable from the structure
             %if data type is supposed to be a character or character array
@@ -177,6 +184,6 @@ function [Value, Valid, Default_Used] = Verify_Structure_Input(Structure, Fieldn
         Valid = false;
     end
     if(~exist('Value','var'))
-        Valid = '';
+        Value = '';
     end
 end
