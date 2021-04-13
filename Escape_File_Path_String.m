@@ -32,16 +32,35 @@ function Escaped_File_Path = Escape_File_Path_String(File_Path, Check_Path_Alrea
         %Valid datatype
         if(ischar(File_Path))
             % Use regex to find a valid windows directory path, stripping any existing escaping quotations into Match{1}{1} and Match{1}{3}
+            %% Check absolute directory paths
             [~, Matches] = regexp(File_Path, '^("?)([a-zA-Z]:\\(?:(?:(?![<>:"\/\\|?*]).)+(?:(?<![ .])\\)?)*)("?)$', 'match', 'tokens');
-            if(Check_Path_Already_Exists)
-                if(isfile(Matches{1}{2}) || isfolder(Matches{1}{2}))
-                    % Escape the file path
-                    Escaped_File_Path = strcat('"', Matches{1}{2}, '"');
+            if(~isempty(Matches))
+                if(Check_Path_Already_Exists)
+                    if(isfile(Matches{1}{2}) || isfolder(Matches{1}{2}))
+                        % Escape the file path
+                        Escaped_File_Path = strcat('"', Matches{1}{2}, '"');
+                    else
+                        warning(strcat("Escape_File_Path_String : Could not locate file or directory : ", Matches{1}{2}));
+                    end
                 else
-                    warning(strcat("Escape_File_Path_String : Could not locate file or directory : ", Matches{1}{2}));
+                    Escaped_File_Path = strcat('"', Matches{1}{2}, '"');
                 end
             else
-                Escaped_File_Path = strcat('"', Matches{1}{2}, '"');
+                %% Check relative directory paths
+                [~, Matches] = regexp(File_Path, '^("?)(\\?(?:(?:(?![<>:"\/\\|?*]).)+(?:(?<![ .])\\)?)*)("?)$', 'match', 'tokens');
+                if(~isempty(Matches))
+                    if(Check_Path_Already_Exists)
+                        if(isfile(Matches{1}{2}) || isfolder(Matches{1}{2}))
+                            % Escape the file path
+                            Escaped_File_Path = strcat('"', Matches{1}{2}, '"');
+                        else
+                            warning(strcat("Escape_File_Path_String : Could not locate file or directory : ", Matches{1}{2}));
+                        end
+                    else
+                        Escaped_File_Path = strcat('"', Matches{1}{2}, '"');
+                    end
+                else
+                end
             end
         else
             error("Escape_File_Path_String : Expected first input to be a character array or string.");
