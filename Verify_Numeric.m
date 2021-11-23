@@ -17,8 +17,9 @@ function [Numeric_Value, Numeric_Valid] = Verify_Numeric(String)
             if(length(Numeric_Value) == 1)
                 Numeric_Value = str2num(char(Numeric_Value));
             elseif(length(Numeric_Value) > 1)
-                disp("More than one numeric component found, defaulting to first value.");
-                Numeric_Value = str2num(char(Numeric_Value(1)));
+                Numeric_Value = cell2mat(cellfun(@str2num, cellfun(@char, Numeric_Value,'un', 0),'un', 0));
+                %disp("More than one numeric component found, defaulting to first value.");
+                %Numeric_Value = str2num(char(Numeric_Value(1)));
             else
                 disp("No numeric value found in string.");
                 Numeric_Valid = false;
